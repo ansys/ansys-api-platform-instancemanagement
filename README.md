@@ -7,37 +7,32 @@ the Product Instance Management (PIM) API.
 #### Installation
 
 Provided that these wheels have been published to public PyPI, they can be
-installed with:
+installed with this command:
 
 ```
 pip install ansys-api-platform-instancemanagement
 ```
 
-Otherwise, see the
-
-
 #### Build
 
-To build the gRPC packages, run:
+To build the gRPC packages, run these commands:
 
 ```
-pip install build
 python -m build
 ```
 
-This will create both the source distribution containing just the protofiles
-along with the wheel containing the protofiles and build Python interface
-files.
+The preceding commands create both the source distribution containing only the protofiles
+and the wheel containing the protofiles and build Python interface files.
 
 Note that the interface files are identical regardless of the version of Python
 used to generate them, but the last pre-built wheel for ``grpcio~=1.17`` was
-Python 3.7, so to improve your build time, use Python 3.7 when building the
+Python 3.7. To improve your build time, use Python 3.7 when building the
 wheel.
 
 
 #### Manual Deployment
 
-After building the packages, manually deploy them with:
+After building the packages, manually deploy them with these commands:
 
 ```
 pip install twine
@@ -55,7 +50,7 @@ these are built on PRs, the main branch, and on tags when pushing. Artifacts
 are uploaded for each PR.
 
 To publicly release wheels to PyPI, ensure your branch is up-to-date and then
-push tags. For example, for the version ``v0.5.0``.
+push tags. These commands provides an example for the version ``v0.5.0``.
 
 ```bash
 git tag v0.5.0
