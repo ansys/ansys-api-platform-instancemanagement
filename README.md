@@ -15,14 +15,14 @@ pip install ansys-api-platform-instancemanagement
 
 #### Build
 
-To build the gRPC packages, run these commands:
+To build the gRPC packages, run this command:
 
 ```
 python -m build
 ```
 
-The preceding commands create both the source distribution containing only the protofiles
-and the wheel containing the protofiles and build Python interface files.
+The preceding command creates both the source distribution containing only the PROTO files
+and the wheel containing the PROTO files and build Python interface files.
 
 Note that the interface files are identical regardless of the version of Python
 used to generate them, but the last pre-built wheel for ``grpcio~=1.17`` was

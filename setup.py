@@ -1,4 +1,4 @@
-"""Installation file for the ansys-api-platform-instancemanagement package"""
+"""Installation file for the ``ansys-api-platform-instancemanagement`` package"""
 
 import os
 from datetime import datetime
