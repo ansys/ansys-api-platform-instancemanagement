@@ -1,6 +1,6 @@
 ### ansys-api-platform-instancemanagement gRPC Interface Package
 
-![Ansys Logo](./ansys-logo.png)
+![Ansys logo](./doc/source/_static/ansys-logo.png)
 
 This Python package contains the auto-generated gRPC Python interface files for
 the Product Instance Management (PIM) API.

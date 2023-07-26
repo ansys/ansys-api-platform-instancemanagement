@@ -1,0 +1,16 @@
+# Lint directives.  Documentation:
+# https://github.com/yoheimuta/protolint/blob/master/_example/config/.protolint.yaml
+lint:
+  # Linter directories to walk.
+  directories:
+    exclude:
+      - doc
+
+  rules:
+    # Use default rules
+    all_default: true
+
+  # Linter rules option.
+  rules_option:
+    max_line_length:
+      max_chars: 120
