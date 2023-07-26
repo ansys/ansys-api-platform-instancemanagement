@@ -11,7 +11,7 @@ lint:
   rules:
     # Use default rules
     all_default: true
- 
+
     # - Proto files are not fully documented.
     # - Many repeated messages are not properly pluralized
     # - Enum fields are not properly prefixed with the enum name

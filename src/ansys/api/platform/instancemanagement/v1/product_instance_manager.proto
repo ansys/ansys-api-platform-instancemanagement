@@ -42,15 +42,15 @@ message Instance {
   // e.g: definitions/workbench-221
   // Note: A list of all product definition names can be found using `ListDefinitions`
   string definition_name = 2;
-    
+
   // (Output only) The status of the instance.
   // When this status is true, then the services can be used.
   bool ready = 3;
-  
+
   // (Output only) Human readable message elaborating the status of the instance.
   // Available only if ready is false.
   string status_message = 4;
-  
+
   // (Output only) Services exposed by this instance, by name.
   // Available only if the instance is ready.
   // The list of keys must match the `available_service_names` of this instance definition.
@@ -65,17 +65,17 @@ message Definition {
   // The product definition name.
   // e.g: definitions/workbench-221
   string name = 1;
-  
+
   // Name of the product.
   // e.g: workbench
   string product_name = 2;
-  
+
   // Version of the product.
   // For product following the unified installation, it
   // should be the 3 letters short name of the version.
   // e.g: 221
   string product_version = 3;
-  
+
   // List of available services name that an instance of this definition
   // will expose once created.
   // If the instance exposes a main HTTP API, then the service must be named "http"
@@ -89,7 +89,7 @@ message Service {
   // For gRPC, this is a valid URI, following gRPC name resolution syntax: https://grpc.github.io/grpc/core/md_doc_naming.html
   // For HTTP/REST, this is a valid http or https URI. It is the base path of the service API.
   string uri = 1;
-  
+
   // The list of headers to pass to the service for each request to the service.
   map<string, string> headers = 2;
 }
