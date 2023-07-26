@@ -32,6 +32,8 @@ service ProductInstanceManager {
   rpc GetDefinition(GetDefinitionRequest) returns (Definition);
 }
 
+// Running instance of a product definition
+// To list the running instances, use `ListInstances`
 message Instance {
   // (Output only) The name of the product instance.
   // Starts with 'instances/'
@@ -86,7 +88,8 @@ message Definition {
 // A service available from a running product instance.
 message Service {
   // The URI to reach the service
-  // For gRPC, this is a valid URI, following gRPC name resolution syntax: https://grpc.github.io/grpc/core/md_doc_naming.html
+  // For gRPC, this is a valid URI, following gRPC name resolution syntax:
+  // https://grpc.github.io/grpc/core/md_doc_naming.html
   // For HTTP/REST, this is a valid http or https URI. It is the base path of the service API.
   string uri = 1;
 
