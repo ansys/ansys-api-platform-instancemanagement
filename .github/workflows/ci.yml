@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
     tags:
@@ -51,7 +52,7 @@ jobs:
           path: dist
 
       - name: "Display structure of downloaded files"
-        run: ls -R artifacts
+        run: ls -R dist
 
       - name: "Release to public PyPI"
         run: |
