@@ -15,10 +15,13 @@ product = "platform"
 library = "instancemanagement"
 package_info = ["ansys", "api", product, library, "v1"]
 with open(
-    os.path.join(HERE, "src", "ansys", "api", product, library, "VERSION"),
+    os.path.join(HERE, "src", "ansys", "api", product, library, "_version.py"),
     encoding="utf-8",
 ) as f:
-    version = f.read().strip()
+    # Parse the version from the _version.py file
+    version_file_vars = {}
+    exec(f.read(), version_file_vars)
+    version = version_file_vars["__version__"]
 
 package_name = "ansys-api-platform-instancemanagement"
 dot_package_name = ".".join(filter(None, package_info))
