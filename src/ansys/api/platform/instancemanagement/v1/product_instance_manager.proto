@@ -87,6 +87,38 @@ message Definition {
   repeated string available_service_names = 4;
 }
 
+// Resolved file paths a client needs to create an mTLS-secured gRPC channel.
+// All paths are fully resolved by the server (env-var fallbacks and defaults applied).
+message MtlsClientInfo {
+  // Path to the trusted CA certificate file (ca.crt).
+  string ca_certificate_path = 1;
+
+  // Path to the client's certificate file (client.crt).
+  string client_certificate_path = 2;
+
+  // Path to the client's private key file (client.key).
+  string client_key_path = 3;
+}
+
+// Connection security info for a service, as resolved by the server.
+// Tells the client how to configure its gRPC channel.
+message ServiceSecurityInfo {
+  oneof transport {
+    // No TLS. Connect with an insecure channel.
+    google.protobuf.Empty insecure = 1;
+
+    // Mutual TLS. The client must load these files to build its channel.
+    MtlsClientInfo mtls = 2;
+
+    // Windows user-based authentication (Windows only).
+    // Connect with an insecure channel; the server-side interceptor handles auth.
+    google.protobuf.Empty wnua = 3;
+
+    // Unix Domain Socket. The socket path is also encoded in the service URI.
+    google.protobuf.Empty uds = 4;
+  }
+}
+
 // A service available from a running product instance.
 message Service {
   // URI to reach the service.
@@ -97,6 +129,87 @@ message Service {
 
   // List of headers to pass to the service for each request to the service.
   map<string, string> headers = 2;
+
+  // (Output only) How to secure the connection to this service.
+  // Only set when the instance was created with explicit security settings.
+  ServiceSecurityInfo security = 3;
+}
+
+// Individual certificate and key file paths for mTLS.
+// Expected file naming convention:
+//   Client Certificate:      client.crt
+//   Client Private Key:      client.key
+//   Server Certificate:      server.crt
+//   Server Private Key:      server.key
+//   Trusted CA Certificates: ca.crt
+message MtlsCertificatePaths {
+  // Path to the server's private key file (server.key).
+  string server_key_path = 1;
+
+  // Path to the server's certificate file (server.crt).
+  string server_certificate_path = 2;
+
+  // Path to the trusted CA certificate file (ca.crt).
+  string ca_certificate_path = 3;
+
+  // Path to the client's private key file (client.key).
+  string client_key_path = 4;
+
+  // Path to the client's certificate file (client.crt).
+  string client_certificate_path = 5;
+}
+
+// Settings for mutual TLS (mTLS) — a secure gRPC channel with certificates.
+//
+// Certificate resolution order:
+//   1. `certificate_source` (directory path or individual paths), if set.
+//   2. Path from the ANSYS_GRPC_CERTIFICATES environment variable, if set.
+//   3. Default directory: "certs".
+message MtlsSettings {
+  // Specify certificates either as a directory or as individual file paths.
+  // If neither is set, the server falls back to the ANSYS_GRPC_CERTIFICATES
+  // environment variable, then to the default "certs" directory.
+  oneof certificate_source {
+    // Directory containing all certificate and key files.
+    string certificates_directory = 1;
+
+    // Individual file paths for each certificate and key.
+    MtlsCertificatePaths certificate_paths = 2;
+  }
+}
+
+// Settings for a Unix Domain Socket (UDS) connection.
+message UdsSettings {
+  // Full path of the socket file.
+  // When set, socket_directory and socket_identifier are ignored.
+  string socket_path = 1;
+
+  // Directory where socket files are stored.
+  string socket_directory = 2;
+
+  // Identifier used in the socket file name.
+  string socket_identifier = 3;
+}
+
+// Security settings for the gRPC service exposed by a product instance.
+//
+// Set exactly one field to select the transport mode and supply its settings.
+// If no field is set, the server applies its default security configuration.
+message InstanceSecuritySettings {
+  oneof transport {
+    // Insecure gRPC channel (no TLS).
+    google.protobuf.Empty insecure = 1;
+
+    // Mutual TLS — secure gRPC channel with client and server certificates.
+    MtlsSettings mtls = 2;
+
+    // Windows user-based authentication (Windows only).
+    // Uses an insecure gRPC channel with a server-side interceptor.
+    google.protobuf.Empty wnua = 3;
+
+    // Unix Domain Socket connection.
+    UdsSettings uds = 4;
+  }
 }
 
 // Request message for the `CreateInstance` method.
@@ -105,6 +218,10 @@ message CreateInstanceRequest {
   // Note: You can call the `ListDefinitions` method to get a list of existing instance
   // definitions.
   Instance instance = 1;
+
+  // Optional security settings for the gRPC service exposed by the instance.
+  // If not set, the server applies default security settings.
+  InstanceSecuritySettings security_settings = 2;
 }
 
 // Request message for the `DeleteInstance` method.
